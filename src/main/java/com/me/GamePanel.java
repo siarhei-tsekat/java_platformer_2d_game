@@ -14,7 +14,7 @@ public class GamePanel extends JPanel {
 
     private final MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
-    private BufferedImage image;
+    private BufferedImage image, subImg;
 
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
@@ -57,7 +57,8 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        graphics.drawImage(image.getSubimage(0, 0, 64, 40), 0, 0, null);
+        subImg = image.getSubimage(1 * 64, 8 * 40, 64, 40);
+        graphics.drawImage(subImg, (int) xDelta, (int) yDelta, 128, 80, null);
     }
 
 }
