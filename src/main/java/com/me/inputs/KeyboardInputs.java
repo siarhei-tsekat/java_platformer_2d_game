@@ -23,13 +23,13 @@ public class KeyboardInputs implements KeyListener {
                 gamePanel.getGame().getPlayer().setUp(true);
                 break;
             case KeyEvent.VK_A:
-                gamePanel.getGame().getPlayer().setRight(true);
+                gamePanel.getGame().getPlayer().setLeft(true);
                 break;
             case KeyEvent.VK_S:
                 gamePanel.getGame().getPlayer().setDown(true);
                 break;
             case KeyEvent.VK_D:
-                gamePanel.getGame().getPlayer().setLeft(true);
+                gamePanel.getGame().getPlayer().setRight(true);
                 break;
         }
     }
@@ -41,13 +41,13 @@ public class KeyboardInputs implements KeyListener {
                 gamePanel.getGame().getPlayer().setUp(false);
                 break;
             case KeyEvent.VK_A:
-                gamePanel.getGame().getPlayer().setRight(false);
+                gamePanel.getGame().getPlayer().setLeft(false);
                 break;
             case KeyEvent.VK_S:
                 gamePanel.getGame().getPlayer().setDown(false);
                 break;
             case KeyEvent.VK_D:
-                gamePanel.getGame().getPlayer().setLeft(false);
+                gamePanel.getGame().getPlayer().setRight(false);
                 break;
         }
     }
