@@ -1,7 +1,8 @@
 package com.me;
 
-import com.me.entities.Player;
-import com.me.levels.LevelManager;
+import com.me.gamestates.GameState;
+import com.me.gamestates.Menu;
+import com.me.gamestates.Playing;
 
 import java.awt.*;
 
@@ -13,8 +14,8 @@ public class Game implements Runnable {
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
 
-    private Player player;
-    private LevelManager levelManager;
+    private Playing playing;
+    private Menu menu;
 
     public static final float SCALE = 2f;
     public static final int TILES_DEFAULT_SIZE = 32;
@@ -34,9 +35,8 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        levelManager = new LevelManager(this);
-        player = new Player(200, 200, (int) (64 * SCALE), (int)(40 * SCALE));
-        player.loadLevelData(levelManager.getCurrentLevel().getLevelData());
+        menu = new Menu(this);
+        playing = new Playing(this);
     }
 
     private void startGameLoop() {
@@ -45,13 +45,29 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player.update();
-        levelManager.update();
+
+        switch (GameState.state) {
+
+            case PLAYING:
+                playing.update();
+                break;
+            case MENU:
+                menu.update();
+                break;
+        }
     }
 
     public void render(Graphics graphics) {
-        levelManager.draw(graphics);
-        player.render(graphics);
+
+        switch (GameState.state) {
+
+            case PLAYING:
+                playing.draw(graphics);
+                break;
+            case MENU:
+                menu.draw(graphics);
+                break;
+        }
     }
 
     @Override
@@ -98,11 +114,17 @@ public class Game implements Runnable {
         }
     }
 
-    public Player getPlayer() {
-        return player;
+    public void windowFocusLost() {
+        if (GameState.state == GameState.PLAYING) {
+            playing.getPlayer().resetDirBooleans();
+        }
     }
 
-    public void windowFocusLost() {
-        player.resetDirBooleans();
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
     }
 }
