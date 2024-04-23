@@ -4,6 +4,7 @@ import com.me.Game;
 import com.me.entities.Player;
 import com.me.levels.LevelManager;
 import com.me.ui.PausedOverlay;
+import com.me.utils.LoadSave;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,12 @@ public class Playing extends State implements StateMethods {
     private LevelManager levelManager;
     private boolean paused = false;
     private PausedOverlay pausedOverlay;
+    private int xLevelOffset;
+    private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
+    private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+    private int levelTilesWide = LoadSave.getLevelData()[0].length;
+    private int maxTilesOffset = levelTilesWide - Game.TILES_IN_WIDTH;
+    private int maxLevelOffsetX = maxTilesOffset * Game.TILES_SIZE;
 
     public Playing(Game game) {
         super(game);
@@ -41,16 +48,37 @@ public class Playing extends State implements StateMethods {
         if (!paused) {
             levelManager.update();
             player.update();
+            checkCloseToBorder();
         } else {
             pausedOverlay.update();
         }
     }
 
+    private void checkCloseToBorder() {
+        int playerX = (int) (player.getHitBox().x);
+        int diff = playerX - xLevelOffset;
+
+        if (diff > rightBorder) {
+            xLevelOffset += diff - rightBorder;
+        } else if (diff < leftBorder) {
+            xLevelOffset += diff - leftBorder;
+        }
+
+        if (xLevelOffset > maxLevelOffsetX) {
+            xLevelOffset = maxLevelOffsetX;
+        } else if (xLevelOffset < 0) {
+            xLevelOffset = 0;
+        }
+    }
+
     @Override
     public void draw(Graphics graphics) {
-        levelManager.draw(graphics);
-        player.render(graphics);
+        levelManager.draw(graphics, xLevelOffset);
+        player.render(graphics, xLevelOffset);
+
         if (paused) {
+            graphics.setColor(new Color(0, 0, 0, 150));
+            graphics.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pausedOverlay.draw(graphics);
         }
     }
