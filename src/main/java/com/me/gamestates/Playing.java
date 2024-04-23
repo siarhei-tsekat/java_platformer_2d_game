@@ -1,11 +1,10 @@
 package com.me.gamestates;
 
 import com.me.Game;
+import com.me.entities.EnemyManager;
 import com.me.entities.Player;
 import com.me.levels.LevelManager;
 import com.me.ui.PausedOverlay;
-import com.me.utils.Constants;
-import com.me.utils.Constants.Environment;
 import com.me.utils.LoadSave;
 
 import java.awt.*;
@@ -14,12 +13,16 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import static com.me.utils.Constants.Environment.*;
+import static com.me.utils.Constants.Environment.BIG_CLOUD_HEIGHT;
+import static com.me.utils.Constants.Environment.BIG_CLOUD_WIDTH;
+import static com.me.utils.Constants.Environment.SMALL_CLOUD_HEIGHT;
+import static com.me.utils.Constants.Environment.SMALL_CLOUD_WIDTH;
 
 public class Playing extends State implements StateMethods {
 
     private Player player;
     private LevelManager levelManager;
+    private EnemyManager enemyManager;
     private boolean paused = false;
     private PausedOverlay pausedOverlay;
     private int xLevelOffset;
@@ -43,6 +46,7 @@ public class Playing extends State implements StateMethods {
 
     private void initClasses() {
         levelManager = new LevelManager(getGame());
+        enemyManager = new EnemyManager(this);
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE));
         player.loadLevelData(levelManager.getCurrentLevel().getLevelData());
         pausedOverlay = new PausedOverlay(this);
@@ -66,6 +70,7 @@ public class Playing extends State implements StateMethods {
         if (!paused) {
             levelManager.update();
             player.update();
+            enemyManager.update();
             checkCloseToBorder();
         } else {
             pausedOverlay.update();
@@ -97,6 +102,7 @@ public class Playing extends State implements StateMethods {
 
         levelManager.draw(graphics, xLevelOffset);
         player.render(graphics, xLevelOffset);
+        enemyManager.draw(graphics, xLevelOffset);
 
         if (paused) {
             graphics.setColor(new Color(0, 0, 0, 150));
