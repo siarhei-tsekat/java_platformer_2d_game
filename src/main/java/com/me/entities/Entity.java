@@ -22,9 +22,9 @@ public abstract class Entity {
         return hitBox;
     }
 
-    protected void drawHitBox(Graphics graphics) {
+    protected void drawHitBox(Graphics graphics, int xLevelOffset) {
         graphics.setColor(Color.PINK);
-        graphics.drawRect((int) hitBox.x, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
+        graphics.drawRect((int) hitBox.x - xLevelOffset, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
     }
 
     protected void initHitBox(float x, float y, int width, int height) {
