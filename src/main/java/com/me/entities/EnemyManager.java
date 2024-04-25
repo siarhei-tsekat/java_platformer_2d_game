@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static com.me.utils.Constants.EnemyConstants.CRABBY_DRAWOFFSET_Y;
 import static com.me.utils.Constants.EnemyConstants.CRABBY_HEIGHT;
 import static com.me.utils.Constants.EnemyConstants.CRABBY_HEIGHT_DEFAULT;
 import static com.me.utils.Constants.EnemyConstants.CRABBY_WIDTH;
@@ -28,9 +29,9 @@ public class EnemyManager {
         crabbies = LoadSave.getCrabs();
     }
 
-    public void update(int[][] levelData) {
+    public void update(int[][] levelData, Player player) {
         for (Crabby crabby : crabbies) {
-            crabby.update(levelData);
+            crabby.update(levelData, player);
         }
     }
 
@@ -40,7 +41,7 @@ public class EnemyManager {
 
     private void drawCrabs(Graphics graphics, int xLevelOffset) {
         for (Crabby crabby : crabbies) {
-            graphics.drawImage(crabbyArray[crabby.getEnemyState()][crabby.getAnimationIndex()], (int) (crabby.getHitBox().x - xLevelOffset), (int) (crabby.getHitBox().y), CRABBY_WIDTH, CRABBY_HEIGHT, null);
+            graphics.drawImage(crabbyArray[crabby.getEnemyState()][crabby.getAnimationIndex()], (int) crabby.getHitBox().x - xLevelOffset, (int) crabby.getHitBox().y -CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH, CRABBY_HEIGHT, null);
         }
     }
 
